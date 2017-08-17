@@ -4,7 +4,7 @@ from flask import make_response
 app = Flask(__name__)
 
 
-@app.route("/vcard/downloads")
+@app.route("/downloads")
 def vrad_download():
     SAMPLE_VCF = u"""
     BEGIN:VCARD
@@ -27,13 +27,13 @@ def vrad_download():
     return response    
     
 
-@app.route("/vcard")
+@app.route("/")
 def vcard_index():
     template = u"""
     <!DOCTYPE html>
     <html>
     <body>
-        <form method="GET" action="/vcard/downloads">
+        <form method="GET" action="/downloads">
             <input type="submit" value="Download vcards"></input>
         </form>
     </body>

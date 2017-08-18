@@ -39,10 +39,8 @@ def get_vcard_from_code():
 	v = vobject.vCard()
 	v.add('n').value = vobject.vcard.Name(family=u'管理', given=u'太郎')
 	v.add('fn').value = '太郎 管理'
-	v.add('email').value = u'admin@example.com'
 	v.add('org').value = [u'株式会社', u'第一営業部', u'部長']
 	v.add("bday").value = u'19801201'
-	v.add("adr").value = vobject.vcard.Address(country=u'日本', code=u'111-000', region=u'東京都', city=u'新宿区', street=u'1-1')
 
 	def add_item(v, label, value, _type):
 		item = v.add(label)
@@ -50,9 +48,17 @@ def get_vcard_from_code():
 		item.type_param = _type
 		return item
 
+	def add_address(v):
+		adr = v.add("adr")
+		adr.value = vobject.vcard.Address(country=u'日本', code=u'111-000', region=u'東京都', city=u'新宿区', street=u'1-1')
+		adr.type_param = 'work'
+		return v
+
+	add_item(v, 'email', 'admin@example.com', 'work')
 	add_item(v, 'tel', '000-000-000', 'cell')
 	add_item(v, 'tel', '03-111-111', 'work')
 	add_item(v, 'tel', '001-222-222', 'fax')
+	add_address(v)
 
 	return v.serialize()
 

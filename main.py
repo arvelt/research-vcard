@@ -4,6 +4,7 @@ from flask import make_response
 import vobject
 
 app = Flask(__name__)
+app.config.update({'DEBUG': True })
 
 SAMPLE_VCF4 = u"""
 BEGIN:VCARD
@@ -32,6 +33,25 @@ X-PHONETIC-ORG:かいしゃめい
 EMAIL;type=INTERNET;type=WORK;type=pref:admin@example.com
 item1.URL;type=pref:https://example.com
 item1.X-ABLabel:_$!<HomePage>!$_
+END:VCARD
+""".strip()
+
+SAMPLE_VCF3_multi = u"""
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 10.2//EN
+N:管理1-1;太郎;;;
+FN: 太郎1-1 管理
+ORG:会社名;
+EMAIL;type=WORK:admin@example.com
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Apple Inc.//iPhone OS 10.2//EN
+N:管理1-2;太郎;;;
+FN: 太郎1-2 管理
+ORG:会社名;
+EMAIL;type=WORK:admin@example.com
 END:VCARD
 """.strip()
 
@@ -70,16 +90,20 @@ def get_response(vcf):
 	return response	
 
 @app.route("/downloads4")
-def vcrad_download4():
+def downloads4():
 	return get_response(SAMPLE_VCF4)
 
 @app.route("/downloads3")
-def vcrad_download3():
+def downloads3():
 	return get_response(SAMPLE_VCF3)
 
 @app.route("/downloads_code")
-def vcard_downloads_code():
+def downloads_code():
 	return get_response(get_vcard_from_code())
+
+@app.route("/downloads_multiple")
+def downloads_multiple():
+	return get_response(SAMPLE_VCF3_multi)
 
 @app.route("/")
 def vcard_index():
@@ -88,13 +112,16 @@ def vcard_index():
 	<html>
 	<body>
 		<form method="GET" action="/downloads3">
-			<input type="submit" value="Download vcards v3"></input>
+			<input type="submit" value="Download a vcard v3"></input>
 		</form>
 		<form method="GET" action="/downloads4">
-			<input type="submit" value="Download vcards v4"></input>
+			<input type="submit" value="Download a vcard v4"></input>
 		</form>
 		<form method="GET" action="/downloads_code">
-			<input type="submit" value="Download vcards from code"></input>
+			<input type="submit" value="Download a vcard from code"></input>
+		</form>
+		<form method="GET" action="/downloads_multiple">
+			<input type="submit" value="Download multiple vcards"></input>
 		</form>
 	</body>
 	</html>
